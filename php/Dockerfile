@@ -32,7 +32,8 @@ RUN docker-php-ext-install bcmath &&\
     docker-php-ext-install xsl &&\
     docker-php-ext-install zip &&\
     docker-php-ext-configure hash --with-mhash &&\
-    pecl install xdebug && docker-php-ext-enable xdebug
+    pecl install xdebug && docker-php-ext-enable xdebug &&\
+    pecl install mongodb && docker-php-ext-enable mongodb
 
 # composer
 
