@@ -3,7 +3,6 @@
 ####php7.1 image :
 
 ```shell
-#!shell
 $ docker-compose -f docker-compose.test.7.1.yml up
 Creating web.test.canals.php.7.1
 Attaching to web.test.canals.php.7.1
@@ -26,7 +25,6 @@ To verify that everything goes well, just point your preferred browser to the fo
 ####php5.6 image :
 
 ```shell
-#!shell
 $ docker-compose -f docker-compose.test.5.6.yml up
   Creating web.test.canals.php.5.6
   Attaching to web.test.canals.php.5.6
