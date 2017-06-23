@@ -1,0 +1,13 @@
+version: "3"
+services:
+  web:
+    image: canals/php
+    container_name: web.test.canals.php.7.1
+    ports:
+      - "25080:80"
+      - "25443:443"
+    volumes :
+      - ./web:/var/www/html
+      - ./src:/var/www/src
+
+

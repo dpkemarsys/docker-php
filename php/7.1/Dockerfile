@@ -33,23 +33,27 @@ RUN docker-php-ext-install bcmath &&\
     docker-php-ext-install zip &&\
     docker-php-ext-configure hash --with-mhash &&\
     pecl install xdebug && docker-php-ext-enable xdebug &&\
-    pecl install mongodb && docker-php-ext-enable mongodb
-
-# composer
-
-RUN curl -sS https://getcomposer.org/installer | php \
-  && mv composer.phar /usr/bin/composer
+    pecl install mongodb && docker-php-ext-enable mongodb &&\
+    curl -sS https://getcomposer.org/installer | php \
+            && mv composer.phar /usr/bin/composer
 
 # Apache Configuration
 RUN a2enmod rewrite 
 
 # SSL
-RUN a2enmod ssl && \
-    a2ensite default-ssl &&\
+RUN mv  /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/000-default-ssl.conf &&\
+    a2enmod ssl && \
+    a2ensite 000-default-ssl &&\
     openssl req -subj '/CN=example.com/O=My Company Name LTD./C=US' -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem
 
-expose 443
+EXPOSE 443
+
 # Imagemagick
 RUN apt-get install --yes --force-yes libmagickwand-dev libmagickcore-dev
 RUN yes '' | pecl install -f imagick &&\
     docker-php-ext-enable imagick
+
+COPY create_vhost start /usr/local/bin/
+COPY php.ini /usr/local/etc/php/
+
+CMD ["start"]
