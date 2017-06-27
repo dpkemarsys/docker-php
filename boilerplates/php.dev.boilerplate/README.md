@@ -35,7 +35,7 @@ $ docker-compose -f docker-compose.yml start
 
 ####exemple :
 ```
-serices:
+services:
   web:
     image: canals/php
     container_name: web.dev.local
@@ -75,7 +75,6 @@ mysql, par exemple dans les services php.
 ```
   mysql:
     image: mysql:5.6
-#   image: mariadb:latest
     container_name: mysql.dev.local
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -101,7 +100,7 @@ mysql, par exemple dans les services php.
 
 #### exemple
 
- ```
+```
   mongodb:
     image: mongo:3.4
     container_name: mongo.dev.local
@@ -115,7 +114,7 @@ mysql, par exemple dans les services php.
         - "8081:8081"
      links:
         - mongodb:mongo
- ```
+```
 
 ###mailcatcher
  MailCatcher est un service de mail qui offre un contexte de test pour les
@@ -128,30 +127,30 @@ mysql, par exemple dans les services php.
  * ajouter le lien dans les services qui doivent accéder au serveur
 
 ####exemple
- ```
+```
 mailcatcher:
   image: schickling/mailcatcher
   container_name: mail.dev.local
   ports:
     - "1080:1080"
     - "1025:1025
- ```
+```
 
 ####usage
  Dans un service php déclarant le lien mailcatcher :
- ```
+```
  web:
      image: canals/php
      ...
      links :
        - mysql:db
        - mailcatcher:mail
- ```
+```
 
- il faut utiliser le serveur de mail nommé `mail` sur le port `1025`.`
+ il faut utiliser le serveur de mail nommé `mail` sur le port `1025`.
 
  Par exemple, avec SwiftMailer :
- ```
+```
  $mailer = new Swift_Mailer( new Swift_SmtpTransport('mail', 1025) );
- ```
+```
 
