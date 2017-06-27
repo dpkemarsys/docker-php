@@ -32,7 +32,7 @@ $ docker-compose -f docker-compose.test.5.6.yml up
 
 ```
 
-should lead to the creation and enaction of a container named _web.test.canals.php.7.1_ .
+should lead to the creation and enaction of a container named _web.test.canals.php.5.6_ .
 
 To verify that everything goes well, just point your preferred browser to the following urls:
 

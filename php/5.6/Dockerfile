@@ -8,32 +8,20 @@ RUN apt-get update && \
     libxml2-dev libfreetype6-dev \
     libgd-dev libmcrypt-dev bzip2 \
     libbz2-dev libtidy-dev libcurl4-openssl-dev \
-    libz-dev libmemcached-dev libxslt-dev git-core
+    libz-dev libmemcached-dev libxslt-dev git-core libpq-dev
 
 
 # PHP Configuration
-RUN docker-php-ext-install bcmath &&\
-    docker-php-ext-install bz2 && \
-    docker-php-ext-install calendar && \
-    docker-php-ext-install dba && \
-    docker-php-ext-install exif &&\
+RUN docker-php-ext-install bcmath bz2 calendar dba exif gettext intl mcrypt soap tidy xmlrpc xsl zip&&\
+    docker-php-ext-install mysqli pgsql pdo pdo_mysql pdo_pgsql  &&\
     docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr &&\
     docker-php-ext-install gd &&\
-    docker-php-ext-install gettext &&\
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl &&\
     docker-php-ext-install imap &&\
-    docker-php-ext-install intl &&\
-    docker-php-ext-install mcrypt &&\
-    docker-php-ext-install pdo pdo_mysql &&\
-    docker-php-ext-install soap &&\
-    docker-php-ext-install tidy &&\
-    docker-php-ext-install xmlrpc &&\
-    docker-php-ext-install mbstring &&\
-    docker-php-ext-install xsl &&\
-    docker-php-ext-install zip &&\
     docker-php-ext-configure hash --with-mhash &&\
     pecl install xdebug && docker-php-ext-enable xdebug &&\
     pecl install mongodb && docker-php-ext-enable mongodb &&\
+    pecl install redis && docker-php-ext-enable redis && \
     curl -sS https://getcomposer.org/installer | php \
             && mv composer.phar /usr/bin/composer
 

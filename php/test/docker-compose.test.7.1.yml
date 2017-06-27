@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: canals/php
+    image: canals/php:7.1
     container_name: web.test.canals.php.7.1
     ports:
       - "25080:80"

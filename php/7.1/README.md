@@ -24,14 +24,13 @@ Le dockerfile s'inspire de [celui-ci](https://hub.docker.com/r/lavoweb/php-5.6/)
 + extensions : `mbstring`, `curl`, `ftp`, `openssl`, `zlib`, `bcmath`, `bz2`, `calendar`, `dba`, `exif`
    `gd`, `gettext`, `imap`, `intl`, `mcrypt`, `soap`, `tidy`, `xmlrpc`, `xsl`, `zip`, `imagick`
 + PDO : `pdo`, `pdo_mysql`, `pdo_sqlite`, `pdo_pgsql`
-+ autres extensions : `xdebug`, `mongodb`
++ autres extensions : `xdebug`, `mongodb`, `redis`
 + composer
 + pour ajouter de nouvelles extensions : se référer à la doc de l'image php officielle, et créer un dockerfile
 
 Configuration php en mode développement :
 ```
 [PHP]
-
 
 memory_limit = 512M
 max_execution_time = 60
@@ -40,7 +39,6 @@ display_errors = On
 display_startup_errors = On
 track_errors = On
 variables_order = "GPCS"
-
 
 ;;;;;;;;;;;;;;;;
 ; File Uploads ;
@@ -53,7 +51,8 @@ max_file_uploads = 25
 ;;;;;;;;;;;;;;;;;;
 ; Fopen wrappers ;
 ;;;;;;;;;;;;;;;;;;
-allow_url_fopen = Off
+allow_url_fopen = On
+allow_url_include = Off
 
 ```
 
