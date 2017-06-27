@@ -71,6 +71,7 @@ Ne pas oublier de lier le service mysql dans tous les services qui doivent accé
 mysql, par exemple dans les services php.
 
 ####exemple
+
 ```
   mysql:
     image: mysql:5.6
@@ -90,7 +91,7 @@ mysql, par exemple dans les services php.
        - "8080:8080"
      links:
        - mysql:db
-````
+```
 
 ### mongodb + mongo-express
 
@@ -98,7 +99,8 @@ mysql, par exemple dans les services php.
 * mongo-express est un client mongo pour interagir de façon interactive avec le serveur mongo,
  basé sur l'image [officielle](https://hub.docker.com/_/mongo-express/) `mong-express`
 
- #### exemple
+#### exemple
+
  ```
   mongodb:
     image: mongo:3.4
@@ -115,7 +117,7 @@ mysql, par exemple dans les services php.
         - mongodb:mongo
  ```
 
- ###mailcatcher
+###mailcatcher
  MailCatcher est un service de mail qui offre un contexte de test pour les
  fonctionnalités d'envoi de mail d'une application web. MailCatcher est un serveur de mail
  permettant de consulter l'ensemble des messages qui lui sont adressés via une interface web.
@@ -125,7 +127,7 @@ mysql, par exemple dans les services php.
  * l'image expose les ports `1025` et `1080`
  * ajouter le lien dans les services qui doivent accéder au serveur
 
- ####exemple
+####exemple
  ```
 mailcatcher:
   image: schickling/mailcatcher
@@ -135,7 +137,7 @@ mailcatcher:
     - "1025:1025
  ```
 
- ####usage
+####usage
  Dans un service php déclarant le lien mailcatcher :
  ```
  web:
