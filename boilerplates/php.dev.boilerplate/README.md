@@ -96,7 +96,7 @@ mysql, par exemple dans les services php.
 
 * basé sur l'image [officielle](https://hub.docker.com/_/mongo/) `mongo`
 * mongo-express est un client mongo pour interagir de façon interactive avec le serveur mongo,
- basé sur l'image [officielle](https://hub.docker.com/_/mongo-express/) `mong-express`
+ basé sur l'image [officielle](https://hub.docker.com/_/mongo-express/) `mongo-express`
 
 #### exemple
 

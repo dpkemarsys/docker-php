@@ -1,11 +1,12 @@
 #Quelques ressources docker à vocation pédagogique
 
-###Ce dépôt contient :
+##Contenu du dépôt :
 
-+ un [*template*](boilerplates/php.dev.boilerplate/?fileviewer=file-view-default ) pour fabriquer et déployer un ensemble de services correspondant à un environnement
-   de *développement* web en php : php/apache, mysql, adminer, mongo etc ..
+###Template docker-compose
+Un [*template*](boilerplates/php.dev.boilerplate/?fileviewer=file-view-default ) pour fabriquer et déployer
+un ensemble de services correspondant à un environnement de *développement* web en php : php/apache, mysql, adminer, mongo, postgres etc ..
 
-
-+ des images docker pour php/apache
-    * une version php [5.6](php/5.6/?at=master) :
-    * une version php [7.1](php/7.1/?at=master)
+### images php docker
+Des images docker pour [php/apache](php), disponibles [ici](https://hub.docker.com/r/canals/php/)
+    * une version php 7.1
+    * une version php 5.6
