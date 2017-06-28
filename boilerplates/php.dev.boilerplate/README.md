@@ -59,7 +59,7 @@ services:
 
 ### mysql + adminer
 
-* basé sur les images officielles `mysql` (ou `mariadb)et `adminer`
+* basé sur les images officielles `mysql` (ou `mariadb`)et `adminer`
     * pour plus de détails, voir la doc [mysql](https://hub.docker.com/_/mysql/) et
      [adminer](https://hub.docker.com/_/adminer/)
 * conseils : définir un password pour l'utilisateur `root`
@@ -75,6 +75,7 @@ mysql, par exemple dans les services php.
 ```
   mysql:
     image: mysql:5.6
+#   image: mariadb:latest
     container_name: mysql.dev.local
     environment:
       - MYSQL_ROOT_PASSWORD=root
