@@ -2,7 +2,7 @@
 
 ###Ce dépôt contient :
 
-+ un [template](https://bitbucket.org/canals5/docker-things/src/boilerplates/php.dev.boilerplate/README.md) pour fabriquer et déployer un ensemble de services correspondant à un environnement
++ un [template](https://bitbucket.org/canals5/docker-things/src/boilerplates/php.dev.boilerplate ) pour fabriquer et déployer un ensemble de services correspondant à un environnement
    de *développement* web en php : php/apache, mysql, adminer, mongo etc ..
 
 
