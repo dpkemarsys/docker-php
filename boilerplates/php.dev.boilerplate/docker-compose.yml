@@ -31,8 +31,11 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=user
       - MYSQL_PASSWORD=user
+#     - MYSQL_DATABASE=mydatab
     ports:
       - "3603:3306"
+    volumes :
+      - ./sql:/var/sql
 
   adminer:
      image: adminer
