@@ -9,6 +9,8 @@ services:
     ports:
       - "5080:80"
       - "5543:443"
+    env_file:
+ #     - ./webenv.env
     volumes :
       - ./web:/var/www/web
       - ./src:/var/www/src

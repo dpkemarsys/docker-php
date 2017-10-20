@@ -32,6 +32,9 @@ $ docker-compose -f docker-compose.yml start
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
 * attention au nommage des containers lorsque l'on utilise plusieurs services de même type
 * attention aux numéros de ports lorsque l'on utilise plusieurs services de même type
+* pour transmettre des variables d'environnement aux containers, utiliser le chapitre env_file et définir 
+  les variables dans le fichier web.env - Typiquement : http_proxy et https_proxy pour l'usage derrière un 
+  proxy 
 
 ####exemple :
 ```
@@ -45,6 +48,8 @@ services:
     ports:
       - "5080:80"
       - "5543:443"
+    env_file:
+#     - ./webenv.env
     volumes :
       - ./web:/var/www/web
       - ./src:/var/www/src
