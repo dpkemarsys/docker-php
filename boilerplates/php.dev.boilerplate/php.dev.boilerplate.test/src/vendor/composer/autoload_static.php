@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit3699d1e5addcaee78662800cf92c71ce
 {
     public static $files = array (
-        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..',
+        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -25,11 +25,11 @@ class ComposerStaticInit3699d1e5addcaee78662800cf92c71ce
     public static $prefixDirsPsr4 = array (
         'test\\' => 
         array (
-            0 => __DIR__ . '/../..',
+            0 => __DIR__ . '/../..' . '/',
         ),
         'MongoDB\\' => 
         array (
-            0 => __DIR__ . '/..',
+            0 => __DIR__ . '/..' . '/mongodb/mongodb/src',
         ),
     );
 

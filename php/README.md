@@ -10,16 +10,17 @@ Le dockerfile s'inspire de [celui-ci](https://hub.docker.com/r/lavoweb/php-5.6/)
 [vaprobash](https://github.com/fideloper/Vaprobash)
 
 ###tag
-+ `7.1`, `latest` : image pour php 7.1, basée sur l'image officielle `php:7.1-apache`
-+ `5.6` : image pour php 5.6, basée sur l'image officielle `php:5.6-apache`
++ `7.1-cli` : image pour php 7.1 cli, sans apache, basée sur l'image officielle `php:7.1-cli`
++ `7.1`, `latest` : image pour php 7.1 + apache, basée sur l'image officielle `php:7.1-apache`
++ `5.6` : image pour php 5.6 + apache, basée sur l'image officielle `php:5.6-apache`
 
 ###test
 Le répertoire [test](test) contient des fichiers docker-compose pour vérifier le fonctionnement de chacune des 2 images
 
 
-###contenu de l'image
+###contenu des images
 
-####apache :
+####apache (`7.1`, `latest`,  `5.6` ):
 
 + apache 2.4, modules `mod_rewrite` et `mod_ssl` activés,
 + un vhost par défaut sure le port 80, docroot `/var/www/html`
@@ -30,7 +31,7 @@ Le répertoire [test](test) contient des fichiers docker-compose pour vérifier 
 
 ####php :
 
-+ php7.1 ou 5.6 sous forme de module apache (`mod_php7`, `od_php5`)
++ php7.1 ou 5.6 cli et sous forme de module apache (`mod_php7`, `mod_php5`)
 + extensions : `mbstring`, `curl`, `ftp`, `openssl`, `zlib`, `bcmath`, `bz2`, `calendar`, `dba`, `exif`
    `gd`, `gettext`, `imap`, `intl`, `mcrypt`, `soap`, `tidy`, `xmlrpc`, `xsl`, `zip`, `imagick`
 + PDO : `pdo`, `pdo_mysql`, `pdo_sqlite`, `pdo_pgsql`
@@ -67,21 +68,44 @@ allow_url_include = Off
 ```
 
 
-###Utilisation de l'image
+###Utilisation des images
 
+#### image php-cli
+L'image ne démarre aucune commande, et n'expose aucun port. Il est nécessaire de monter 
+les volumes et de prévoir  la commande lors de la création d'un conteneur.
+
+#####exemple : exécution d'un script php dans le répertoire courant : 
+```bash
+$ docker run -it --rm  \
+      -v "$PWD":/var/php \
+      -w /var/php \
+       canals/php:7.1-cli \
+       php prog.php
+```
+#####exemple : lancement d'un serveur php sur le port 8000 dans le répertoire courant : 
+```bash
+$ docker run --rm -it \
+             -p 8000:8000 \
+             -v "$PWD":/var/php \
+             -w /var/php \
+             canals/php:7.1-cli \
+             php -S 0.0.0.0:8000 
+```
+
+#### image php-apache
 Il est conseillé de monter les volumes correspondant aux _docroot_ des vhosts créés : vhost par défaut s'il est utilisé,
 vhost spécifique.
 
-####exemple :
+#####exemple :
 
 ```bash
 $ docker run -d --name vhost-php \
        -e "VHOST_HOSTNAME=vost.php.local" \
        -e "VHOST_DOCROOT=/var/www/vost"   \
        -p 9080:80 -p 9443:443 \
-       -v $(PWD)/html:/var/www/html \
-       -v $(PWD)/api:/var/www/vost \
-       -v $(PWD)/src:/var/www/src \
+       -v "$PWD"/html:/var/www/html \
+       -v "$PWD"/api:/var/www/vost \
+       -v "$PWD"/src:/var/www/src \
        canals/php
 ```
 

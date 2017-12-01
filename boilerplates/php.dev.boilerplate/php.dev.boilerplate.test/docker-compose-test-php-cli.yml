@@ -5,48 +5,21 @@ networks:
     driver: bridge
 
 services:
-  web:
-    image: canals/php
-    container_name: web.dev.local
-    environment:
-      - VHOST_HOSTNAME=web.dev.local
-      - VHOST_DOCROOT=/var/www/web
-    ports:
-      - "5080:80"
-      - "5543:443"
-#    env_file:
-#     - ./webenv.env
-    volumes :
-      - ./web:/var/www/web
-      - ./src:/var/www/src
-      - ./html:/var/www/html
-      - data:/var/www/data
-    networks:
-      - local_network
-    links :
-      - mysql:db
-#      - mongo:mongo
-#      - mail:mail
-#      - postgres:pg
-
   php:
-    image: canals/php7.1-cli
-    container_name: php.local
+    image: canals/php:7.1-cli
     expose:
       - "8000"
     ports:
       - "8800:8000"
-#    env_file:
-#     - ./webenv.env
     volumes:
      - ./:/var/php
     working_dir: /var/php
     networks:
       - local_network
-    command: php -S localhost:8000 index.php
+    command: php -S 0.0.0.0:8000 web/index-cli.php
     links :
       - mysql:db
-#      - mongo:mongo
+      - mongo:mongo
 #      - mail:mail
 #      - postgres:pg
 
@@ -54,11 +27,10 @@ services:
 # mysql + adminer / can be replaced by mariadb
 #############################
   mysql:
-    image: mysql:5.6
-#   image: mariadb:latest
-    container_name: mysql.dev.local
+#    image: mysql:5.6
+    image: mariadb:latest
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root66
       - MYSQL_USER=user
       - MYSQL_PASSWORD=user
       - MYSQL_DATABASE=mydatab
@@ -70,14 +42,13 @@ services:
       - ./sql:/var/sql
 
   adminer:
-     image: adminer
-     container_name: adminer.dev.local
-     ports:
-       - "8080:8080"
+    image: adminer
+    ports:
+      - "8080:8080"
     networks:
       - local_network
-     links:
-       - mysql:db
+    links:
+      - mysql:db
 
 
 
@@ -131,23 +102,21 @@ services:
 ################################################
 # mongodb & mongo-express
 ###############################################
-## mongo:
-#   image: mongo:3.4
-#   container_name: mongo.dev.local
-#   networks:
-#      - local_network
-#   ports:
-#      - 27017:27017
+  mongo:
+    image: mongo:3.4
+    networks:
+      - local_network
+    ports:
+      - 27017:27017
 
-# mongo-express:
-#      image: mongo-express:latest
-#      container_name: mongo_express.dev.local
-#    networks:
-#        - local_network
-#      ports:
-#        - "8081:8081"
-#      links:
-#        - mongo:mongo
+  mongo-express:
+    image: mongo-express:latest
+    networks:
+      - local_network
+    ports:
+      - "8081:8081"
+    links:
+      - mongo:mongo
 
 ##############################################
 # mailcatcher

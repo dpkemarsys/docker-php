@@ -8,7 +8,7 @@
  */
 
 try {
-    $pdo = new PDO( 'mysql:host=db;dbname=mysql', 'root', 'root');
+    $pdo = new PDO( 'mysql:host=db;dbname=mysql', 'root', 'root66');
 } catch (PDOException $e) {
     print 'erreur connexion mysql : ' . $e->getMessage() . '<br>' ;
     die();

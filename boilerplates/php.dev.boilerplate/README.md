@@ -26,17 +26,16 @@ $ docker-compose -f docker-compose.yml start
 
 ### machine(s) php
 
-* un ou plusieurs services php/apache
-* basés sur les images `canals/php`, les tags `:5.6` et `:7.1` sont utilisables
+* un ou plusieurs services php/apache ou php-cli
+* basés sur les images `canals/php`, les tags `:5.6`, `:7.1` et `7.1-cli` sont utilisables
    * pour plus de détails, voir la [doc](https://hub.docker.com/r/canals/php/)
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
-* attention au nommage des containers lorsque l'on utilise plusieurs services de même type
 * attention aux numéros de ports lorsque l'on utilise plusieurs services de même type
 * pour transmettre des variables d'environnement aux containers, utiliser le chapitre env_file et définir 
   les variables dans le fichier web.env - Typiquement : http_proxy et https_proxy pour l'usage derrière un 
   proxy 
 
-####exemple :
+####exemple : service php basé sur apache
 ```
 services:
   web:
@@ -48,7 +47,7 @@ services:
     ports:
       - "5080:80"
       - "5543:443"
-    env_file:
+#    env_file:
 #     - ./webenv.env
     volumes :
       - ./web:/var/www/web
@@ -60,6 +59,21 @@ services:
 #      - mongodb:mongo
 #      - mailcatcher:mail
 #      - postgres:pg
+```
+####exemple : service php-cli avec lancement du serveur embarqué : 
+```
+services:
+  php:
+    image: canals/php:7.1-cli
+    ports:
+      - "8800:8000"
+    volumes:
+     - ./:/var/php
+    working_dir: /var/php
+    command: php -S 0.0.0.0:8000 web/index-cli.php
+    links :
+      - mysql:db
+      - mongo:mongo
 ```
 
 ### mysql + adminer
