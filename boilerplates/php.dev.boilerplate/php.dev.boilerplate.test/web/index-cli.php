@@ -9,12 +9,14 @@
 require __DIR__ . '/../src/vendor/autoload.php';
 require_once __DIR__ . '/../src/sample.php';
 
+file_put_contents("php://stdout", $_SERVER['REQUEST_URI'] ) ;
+
 print "request uri : " . $_SERVER['REQUEST_URI'] . "<br>";
 print "request method " . $_SERVER['REQUEST_METHOD']. "<br><br>";
 
 print "<h2>connexion mysql-mariadb :</h2>" . "<br>";
 try {
-    $pdo = new PDO( 'mysql:host=db;dbname=mysql', 'root', 'root66');
+    $pdo = new PDO( 'mysql:host=db;dbname=mysql', 'root', 'root');
 } catch (PDOException $e) {
     print 'erreur connexion mysql : ' . $e->getMessage() . '<br>' ;
     die();

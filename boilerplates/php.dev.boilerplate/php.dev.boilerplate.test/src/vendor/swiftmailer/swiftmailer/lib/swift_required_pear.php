@@ -22,7 +22,7 @@ require __DIR__.'/Swift.php';
 if (!function_exists('_swiftmailer_init')) {
     function _swiftmailer_init()
     {
-        require __DIR__ . '/swift_init.php';
+        require __DIR__.'/swift_init.php';
     }
 }
 

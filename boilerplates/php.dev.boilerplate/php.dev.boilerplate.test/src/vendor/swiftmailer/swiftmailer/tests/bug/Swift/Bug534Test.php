@@ -11,7 +11,7 @@ class Swift_Bug534Test extends \PHPUnit_Framework_TestCase
             ->setTo('to@example.com')
             ->setSubject('test')
         ;
-        $cid = $message->embed(Swift_Image::fromPath(__DIR__ . '/../../_samples/files/swiftmailer.png'));
+        $cid = $message->embed(Swift_Image::fromPath(__DIR__.'/../../_samples/files/swiftmailer.png'));
         $message->setBody('<img src="'.$cid.'" />', 'text/html');
 
         $that = $this;

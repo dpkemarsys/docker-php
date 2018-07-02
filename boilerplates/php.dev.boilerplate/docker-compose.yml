@@ -6,11 +6,12 @@ networks:
 
 services:
   web:
-    image: canals/php
-    container_name: web.dev.local
+    image: canals/php:latest
     environment:
       - VHOST_HOSTNAME=web.dev.local
       - VHOST_DOCROOT=/var/www/web
+#      - http_proxy=http://www-cache:1234
+#      - https_proxy=https://www-cache:1234
     ports:
       - "5080:80"
       - "5543:443"
@@ -21,6 +22,7 @@ services:
       - ./src:/var/www/src
       - ./html:/var/www/html
       - data:/var/www/data
+    working_dir : /var/www/src
     networks:
       - local_network
     links :
@@ -30,7 +32,7 @@ services:
 #      - postgres:pg
 
   php:
-    image: canals/php7.1-cli
+    image: canals/php7.2-cli
     container_name: php.local
     expose:
       - "8000"
@@ -51,11 +53,11 @@ services:
 #      - postgres:pg
 
 #############################
-# mysql + adminer / can be replaced by mariadb
+# mysql/mariadb + adminer / can be replaced by mariadb
 #############################
   mysql:
-    image: mysql:5.6
-#   image: mariadb:latest
+#    image: mysql:5.6
+    image: mariadb:latest
     container_name: mysql.dev.local
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -74,8 +76,8 @@ services:
      container_name: adminer.dev.local
      ports:
        - "8080:8080"
-    networks:
-      - local_network
+     networks:
+       - local_network
      links:
        - mysql:db
 

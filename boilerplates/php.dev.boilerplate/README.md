@@ -27,23 +27,24 @@ $ docker-compose -f docker-compose.yml start
 ### machine(s) php
 
 * un ou plusieurs services php/apache ou php-cli
-* basés sur les images `canals/php`, les tags `:5.6`, `:7.1` et `7.1-cli` sont utilisables
+* basés sur les images `canals/php`, les tags `:latest`, :7.2` et `7.2-cli`, `:7.1` et `7.1-cli`,`:5.6` sont utilisables
    * pour plus de détails, voir la [doc](https://hub.docker.com/r/canals/php/)
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
 * attention aux numéros de ports lorsque l'on utilise plusieurs services de même type
-* pour transmettre des variables d'environnement aux containers, utiliser le chapitre env_file et définir 
-  les variables dans le fichier web.env - Typiquement : http_proxy et https_proxy pour l'usage derrière un 
-  proxy 
+* pour transmettre des variables d'environnement aux containers, compléter le chapitre `environment` ou utiliser le chapitre env_file et définir 
+  les variables dans le fichier web.env - 
+* Typiquement : définir les variables http_proxy et https_proxy pour utiliser les conteneurs dans un environnement avec un proxy pour l'accès extérieur. 
 
 ####exemple : service php basé sur apache
 ```
 services:
   web:
     image: canals/php
-    container_name: web.dev.local
     environment:
       - VHOST_HOSTNAME=web.dev.local
       - VHOST_DOCROOT=/var/www/web
+      - http_proxy=http://www-cache:1234
+      - https_proxy=http://www-cache:1234
     ports:
       - "5080:80"
       - "5543:443"
@@ -56,21 +57,21 @@ services:
       - data:/var/www/data
     links :
       - mysql:db
-#      - mongodb:mongo
-#      - mailcatcher:mail
-#      - postgres:pg
+      - mongodb:mongo
+      - mailcatcher:mail
+      - postgres:pg
 ```
 ####exemple : service php-cli avec lancement du serveur embarqué : 
 ```
 services:
   php:
-    image: canals/php:7.1-cli
+    image: canals/php:7.2-cli
     ports:
       - "8800:8000"
     volumes:
      - ./:/var/php
     working_dir: /var/php
-    command: php -S 0.0.0.0:8000 web/index-cli.php
+    command: php -S 0.0.0.0:8000 web/index.php
     links :
       - mysql:db
       - mongo:mongo
@@ -93,19 +94,17 @@ mysql, par exemple dans les services php.
 
 ```
   mysql:
-    image: mysql:5.6
-#   image: mariadb:latest
-    container_name: mysql.dev.local
+    image: mariadb:latest
+#    image: mysql:5.6
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=user
       - MYSQL_PASSWORD=user
     ports:
       - "3603:3306"
-
+      
   adminer:
      image: adminer
-     container_name: adminer.dev.local
      ports:
        - "8080:8080"
      links:
@@ -123,20 +122,18 @@ mysql, par exemple dans les services php.
 ```
   mongodb:
     image: mongo:3.4
-    container_name: mongo.dev.local
     ports:
         - 27017:27017
 
   mongo-express:
      image: mongo-express:latest
-     container_name: mongo_express.dev.local
      ports:
         - "8081:8081"
      links:
         - mongodb:mongo
 ```
 
-###mailcatcher
+### mailcatcher
  MailCatcher est un service de mail qui offre un contexte de test pour les
  fonctionnalités d'envoi de mail d'une application web. MailCatcher est un serveur de mail
  permettant de consulter l'ensemble des messages qui lui sont adressés via une interface web.
@@ -150,7 +147,6 @@ mysql, par exemple dans les services php.
 ```
 mailcatcher:
   image: schickling/mailcatcher
-  container_name: mail.dev.local
   ports:
     - "1080:1080"
     - "1025:1025

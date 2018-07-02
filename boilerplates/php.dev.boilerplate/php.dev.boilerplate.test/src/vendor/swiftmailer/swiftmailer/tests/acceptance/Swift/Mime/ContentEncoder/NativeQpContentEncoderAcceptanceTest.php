@@ -11,7 +11,7 @@ class Swift_Mime_ContentEncoder_NativeQpContentEncoderAcceptanceTest extends \PH
 
     protected function setUp()
     {
-        $this->_samplesDir = realpath(__DIR__ . '/../../../../_samples/charsets');
+        $this->_samplesDir = realpath(__DIR__.'/../../../../_samples/charsets');
         $this->_encoder = new Swift_Mime_ContentEncoder_NativeQpContentEncoder();
     }
 

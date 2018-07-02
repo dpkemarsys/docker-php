@@ -7,7 +7,7 @@ class Swift_Encoder_Rfc2231EncoderAcceptanceTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->_samplesDir = realpath(__DIR__ . '/../../../_samples/charsets');
+        $this->_samplesDir = realpath(__DIR__.'/../../../_samples/charsets');
         $this->_factory = new Swift_CharacterReaderFactory_SimpleCharacterReaderFactory();
     }
 

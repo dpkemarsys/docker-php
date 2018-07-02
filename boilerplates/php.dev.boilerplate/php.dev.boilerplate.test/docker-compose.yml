@@ -1,8 +1,12 @@
 version: "3"
+
+networks:
+  local_network:
+    driver: bridge
+
 services:
   web:
-    image: canals/php
-    container_name: web_test
+    image: canals/php:latest
     environment:
       - VHOST_HOSTNAME=web.test.local
       - VHOST_DOCROOT=/var/www/web
@@ -14,99 +18,111 @@ services:
       - ./src:/var/www/src
       - ./html:/var/www/html
       - data:/var/www/data
+    working_dir: /var/www/src
     links :
       - mysql:db
       - postgres:pg
       - mongo:mongo
       - mail:mail
+    networks:
+      - local_network
+
+  php:
+    image: canals/php:7.2-cli
+    expose:
+      - "8000"
+    ports:
+      - "8800:8000"
+    volumes:
+     - ./:/var/php
+    working_dir: /var/php
+    networks:
+      - local_network
+    command: php -S 0.0.0.0:8000 web/index-cli.php
+    links :
+      - mysql:db
+      - mongo:mongo
+#      - mail:mail
+#      - postgres:pg
+
 
 #############################
 # mysql + adminer / can be replaced by mariadb
 #############################
- mysql:
-   image: mysql:5.6
-   image: mariadb:latest
-   container_name: mysql_test
-   environment:
-     - MYSQL_ROOT_PASSWORD=root
-     - MYSQL_USER=user
-     - MYSQL_PASSWORD=user
-   ports:
-     - "3603:3306"
+  mysql:
+    #image: mysql:5.6
+    image: mariadb:latest
+    container_name: mysql_test
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+    ports:
+      - "3603:3306"
+    networks:
+      - local_network
 
- adminer:
+  adminer:
     image: adminer
     ports:
       - "8080:8080"
     links:
       - mysql:db
+    networks:
+      - local_network
 
 ##################################
 # postgres + adminer
 ###################################
   postgres:
     image: postgres
-    container_name: postgres_test
     environment :
       - POSTGRES_PASSWORD = pgroot
       - POSTGRES_USER = pguser
     ports:
       - "5432:5432"
+    networks:
+      - local_network
 
   adminer-pg:
     image: adminer
-    container_name: adminer_pg_test
     ports:
       - "8088:8080"
     links:
       - postgres:db
+    networks:
+      - local_network
 
-
-##############################################
-# A second php service
-##############################################
-
-#  api:
-#      image: canals/php
-#      container_name: api
-##      environment:
-#       - VHOST_HOSTNAME=api.local
-#       - VHOST_DOCROOT=/var/www/api
-#     ports:
-#       - "6080:80"
-#       - "6443:443"
-#     volumes :
-#       - ./api:/var/www/api
-#       - ./src:/var/www/src
-#       - ./html:/var/www/html
-#     links :
-#        - mysql:db
 
 ################################################
 # mongodb & mongo-express
 ###############################################
-   mongo:
-     image: mongo:3.4
-     container_name: mongo_test
-     ports:
-         - 27017:27017
+  mongo:
+    image: mongo:3.4
+    ports:
+      - 27017:27017
+    networks:
+      - local_network
 
-   mongo-express:
-        image: mongo-express:latest
-        container_name: mongo_express_test
-        ports:
-          - "8081:8081"
-        links:
-          - mongo:mongo
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    links:
+      - mongo:mongo
+    networks:
+      - local_network
 
 ##############################################
-# mailcatcher
+# mailcatcher : so useful !
 ##############################################
   mail:
-     image: schickling/mailcatcher
-     container_name: mail_test
-     ports:
-       - "1080:1080"
+    image: schickling/mailcatcher
+    container_name: mail_test
+    ports:
+      - "1080:1080"
+    networks:
+      - local_network
 
 ########################################
 # shared storage : useful for, e.g. sharing

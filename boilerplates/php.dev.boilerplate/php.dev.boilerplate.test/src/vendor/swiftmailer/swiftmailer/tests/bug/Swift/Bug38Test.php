@@ -10,7 +10,7 @@ class Swift_Bug38Test extends \PHPUnit_Framework_TestCase
     {
         $this->_attFileName = 'data.txt';
         $this->_attFileType = 'text/plain';
-        $this->_attFile = __DIR__ . '/../../_samples/files/data.txt';
+        $this->_attFile = __DIR__.'/../../_samples/files/data.txt';
         Swift_Preferences::getInstance()->setCharset('utf-8');
     }
 
