@@ -1,4 +1,25 @@
-###Tests for the 7.1 and 5.6 php/apache images
+###Tests for the 7.2, 7.1 and 5.6 php/apache images
+
+####php7.2 image :
+
+```shell
+$ docker-compose -f docker-compose.test.7.2.yml up
+Creating web.test.canals.php.7.2
+Attaching to web.test.canals.php.7.2
+...
+
+```
+
+should lead to the creation and enaction of a container named _web.test.canals.php.7.2_ .
+
+To verify that everything goes well, just point your preferred browser to the following urls:
+
++ http://localhost:27080/
++ http://localhost:27080/index.html
++ http://localhost:27080/info.php
++ https://localhost:27443/
++ https://localhost:27443/index.html
++ https://localhost:27443/info.php
 
 ####php7.1 image :
 

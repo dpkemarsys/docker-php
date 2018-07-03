@@ -1,26 +1,29 @@
 # canals/php
 
-##Une image docker PHP  construite pour un usage pédagogique et pour fabriquer un environnement de développement web/php
+##Images docker PHP  construite pour un usage pédagogique et pour fabriquer un environnement de développement web/php
 
 ###description
-Image docker pour la création d'un container destiné à du dev. web en php. L'image est basée sur
-les images php [officielle](https://hub.docker.com/_/php/), avec les tag `7.1-apache` ou `5.6-apache`.
+Images docker pour la création d'un container destiné à du dev. web en php. Les images sont basées sur
+les images php [officielle](https://hub.docker.com/_/php/), avec les tag `7.2-apache`, `7.2-cli`, `7.1-apache` , 
+`7.1-cli`ou `5.6-apache`.
 Les images contiennent un grand nombre d'extensions classiques et n'ont pas vocation à être utilisées en production.
 Le dockerfile s'inspire de [celui-ci](https://hub.docker.com/r/lavoweb/php-5.6/), et de
 [vaprobash](https://github.com/fideloper/Vaprobash)
 
 ###tag
++ `7.2-cli` : image pour php 7.2 cli, sans apache, basée sur l'image officielle `php:7.2-cli`
++ `7.2`, `latest` : image pour php 7.2 + apache, basée sur l'image officielle `php:7.2-apache`
 + `7.1-cli` : image pour php 7.1 cli, sans apache, basée sur l'image officielle `php:7.1-cli`
-+ `7.1`, `latest` : image pour php 7.1 + apache, basée sur l'image officielle `php:7.1-apache`
++ `7.1`, : image pour php 7.1 + apache, basée sur l'image officielle `php:7.1-apache`
 + `5.6` : image pour php 5.6 + apache, basée sur l'image officielle `php:5.6-apache`
 
 ###test
-Le répertoire [test](test) contient des fichiers docker-compose pour vérifier le fonctionnement de chacune des 2 images
+Le répertoire [test](test) contient des fichiers docker-compose pour vérifier le fonctionnement de chacune des images
 
 
 ###contenu des images
 
-####apache (`7.1`, `latest`,  `5.6` ):
+####apache (`7.2` , `latest`, `7.1` , `5.6` ):
 
 + apache 2.4, modules `mod_rewrite` et `mod_ssl` activés,
 + un vhost par défaut sure le port 80, docroot `/var/www/html`
@@ -31,9 +34,9 @@ Le répertoire [test](test) contient des fichiers docker-compose pour vérifier 
 
 ####php :
 
-+ php7.1 ou 5.6 cli et sous forme de module apache (`mod_php7`, `mod_php5`)
++ php7.2, php7.1 ou 5.6 cli et sous forme de module apache dans les images apache (`mod_php7`, `mod_php5`)
 + extensions : `mbstring`, `curl`, `ftp`, `openssl`, `zlib`, `bcmath`, `bz2`, `calendar`, `dba`, `exif`
-   `gd`, `gettext`, `imap`, `intl`, `mcrypt`, `soap`, `tidy`, `xmlrpc`, `xsl`, `zip`, `imagick`
+   `gd`, `gettext`, `imap`, `intl`, `mcrypt` (sauf 7.2), `soap`, `tidy`, `xmlrpc`, `xsl`, `zip`, `imagick`
 + PDO : `pdo`, `pdo_mysql`, `pdo_sqlite`, `pdo_pgsql`
 + autres extensions : `xdebug`, `mongodb`, `redis`
 + composer
@@ -41,15 +44,67 @@ Le répertoire [test](test) contient des fichiers docker-compose pour vérifier 
 
 Configuration php en mode développement :
 ```
-[PHP]
+PHP]
 
-memory_limit = 512M
+
+;;;;;;;;;;;;;;;;;;;;
+; Language Options ;
+;;;;;;;;;;;;;;;;;;;;
+
+
+engine = On
+short_open_tag = Off
+precision = 14
+output_buffering = 4096
+zlib.output_compression = Off
+implicit_flush = Off
+
+;;;;;;;;;;;;;;;;;
+; Miscellaneous ;
+;;;;;;;;;;;;;;;;;
+
+expose_php = On
+
+;;;;;;;;;;;;;;;;;;;
+; Resource Limits ;
+;;;;;;;;;;;;;;;;;;;
+
 max_execution_time = 60
-error_reporting = -1
+max_input_time = 60
+memory_limit = 512M
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Error handling and logging ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+error_reporting = E_ALL
 display_errors = On
 display_startup_errors = On
-track_errors = On
+log_errors = On
+log_errors_max_len = 1024
+ignore_repeated_errors = Off
+ignore_repeated_source = Off
+report_memleaks = On
+html_errors = On
+
+
+;;;;;;;;;;;;;;;;;
+; Data Handling ;
+;;;;;;;;;;;;;;;;;
+
 variables_order = "GPCS"
+request_order = "GP"
+register_argc_argv = Off
+auto_globals_jit = On
+
+post_max_size = 16M
+default_mimetype = "text/html"
+default_charset = "UTF-8"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+; Paths and Directories ;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+enable_dl = Off
 
 ;;;;;;;;;;;;;;;;
 ; File Uploads ;
@@ -64,6 +119,7 @@ max_file_uploads = 25
 ;;;;;;;;;;;;;;;;;;
 allow_url_fopen = On
 allow_url_include = Off
+default_socket_timeout = 60
 
 ```
 
@@ -79,7 +135,7 @@ les volumes et de prévoir  la commande lors de la création d'un conteneur.
 $ docker run -it --rm  \
       -v "$PWD":/var/php \
       -w /var/php \
-       canals/php:7.1-cli \
+       canals/php:7.2-cli \
        php prog.php
 ```
 #####exemple : lancement d'un serveur php sur le port 8000 dans le répertoire courant : 
@@ -88,7 +144,7 @@ $ docker run --rm -it \
              -p 8000:8000 \
              -v "$PWD":/var/php \
              -w /var/php \
-             canals/php:7.1-cli \
+             canals/php:7.2-cli \
              php -S 0.0.0.0:8000 
 ```
 
@@ -106,7 +162,7 @@ $ docker run -d --name vhost-php \
        -v "$PWD"/html:/var/www/html \
        -v "$PWD"/api:/var/www/vost \
        -v "$PWD"/src:/var/www/src \
-       canals/php
+       canals/php:latest
 ```
 
 ###Adaptation de l'image
@@ -120,7 +176,7 @@ installer des extensions, pour copier un fichier de configuration ou pour décla
 
 ####exemple
 ```
-FROM canals/php:7.1
+FROM canals/php:7.2
 
 RUN pecl install mailparse \
    && docker-php-ext-enable mailparse
