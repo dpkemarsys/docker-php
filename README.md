@@ -9,5 +9,8 @@ un ensemble de services correspondant à un environnement de *développement* we
 ### images php docker
 Des images docker pour [php/apache](php), disponibles [ici](https://hub.docker.com/r/canals/php/).
 
-+ une version php 7.1
++ une version php7.2 + apache
++ une version PHP7.2 cli
++ une version php 7.1 + apache
++ une version php 7.1 cli
 + une version php 5.6
