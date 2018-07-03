@@ -1,6 +1,8 @@
 # Un template Docker-compose pour un environnement de dev. web en php
 
-## Basé sur les images `canals/php`  et les images officielles de différents outils
+Le template est Basé sur les images php  [`canals/php`](https://hub.docker.com/r/canals/php/) et les images officielles 
+de différents outils. Le template est disponible dans le fichier `docker-compose.yml`. Un exemple d'utilisation complet 
+de ce template est disponible dans le répertoire de `test`.
 
 ## Utilisation
 
@@ -27,8 +29,9 @@ $ docker-compose -f docker-compose.yml start
 ### machine(s) php
 
 * un ou plusieurs services php/apache ou php-cli
-* basés sur les images `canals/php`, les tags `:latest`, :7.2` et `7.2-cli`, `:7.1` et `7.1-cli`,`:5.6` sont utilisables
-   * pour plus de détails, voir la [doc](https://hub.docker.com/r/canals/php/)
+* basés sur les images `canals/php`, les tags `:latest`, `:7.2` et `7.2-cli`, `:7.1` 
+et `7.1-cli`,`:5.6` sont utilisables (pour plus de détails sur ces images, 
+voir la [doc](https://hub.docker.com/r/canals/php/) )
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
 * attention aux numéros de ports lorsque l'on utilise plusieurs services de même type
 * pour transmettre des variables d'environnement aux containers, compléter le chapitre `environment` ou utiliser le chapitre env_file et définir 
@@ -71,7 +74,7 @@ services:
     volumes:
      - ./:/var/php
     working_dir: /var/php
-    command: php -S 0.0.0.0:8000 web/index.php
+    command: php -S 0.0.0.0:8000 index.php
     links :
       - mysql:db
       - mongo:mongo
