@@ -3,7 +3,7 @@
 ##Contenu du dépôt :
 
 ###Template docker-compose
-Un [*template*](boilerplates/php.dev.boilerplate/?fileviewer=file-view-default ) pour fabriquer et déployer
+Un [*template*](boilerplate/?fileviewer=file-view-default ) pour fabriquer et déployer
 un ensemble de services correspondant à un environnement de *développement* web en php : php/apache, mysql, adminer, mongo, postgres etc ..
 
 ### images php docker
