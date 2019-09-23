@@ -10,13 +10,9 @@ services:
     environment:
       - VHOST_HOSTNAME=web.dev.local
       - VHOST_DOCROOT=/var/www/web
-#      - http_proxy=http://www-cache:1234
-#      - https_proxy=https://www-cache:1234
     ports:
       - "5080:80"
       - "5543:443"
-#    env_file:
-#     - ./webenv.env
     volumes :
       - ./web:/var/www/web
       - ./src:/var/www/src
@@ -38,8 +34,6 @@ services:
       - "8000"
     ports:
       - "8800:8000"
-#    env_file:
-#     - ./webenv.env
     volumes:
      - ./:/var/php
     working_dir: /var/php

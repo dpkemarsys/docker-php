@@ -1,0 +1,10 @@
+version: "3"
+services:
+  php:
+    image: canals/php:7.3-cli
+    ports:
+    - "8800:8000"
+    volumes:
+    - ./src:/var/php
+    working_dir: /var/php
+    command: php -S 0.0.0.0:8000 index.php
