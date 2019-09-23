@@ -29,20 +29,18 @@ $ docker-compose -f docker-compose.yml start
 ### machine(s) php
 
 * un ou plusieurs services php/apache ou php-cli
-* basés sur les images `canals/php`, les tags `:latest`, `:7.2` et `7.2-cli`, `:7.1` 
+* basés sur les images `canals/php`, les tags `:latest`, `:7.3`, `:7.2` et `7.2-cli`, `:7.1` 
 et `7.1-cli`,`:5.6` sont utilisables (pour plus de détails sur ces images, 
 voir la [doc](https://hub.docker.com/r/canals/php/) )
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
 * attention aux numéros de ports lorsque l'on utilise plusieurs services de même type
-* pour transmettre des variables d'environnement aux containers, compléter le chapitre `environment` ou utiliser le chapitre env_file et définir 
-  les variables dans le fichier web.env - 
-* Typiquement : définir les variables http_proxy et https_proxy pour utiliser les conteneurs dans un environnement avec un proxy pour l'accès extérieur. 
 
-####exemple : service php basé sur apache
+
+#### exemple : service php basé sur apache
 ```
 services:
   web:
-    image: canals/php
+    image: canals/php:latest
     environment:
       - VHOST_HOSTNAME=web.dev.local
       - VHOST_DOCROOT=/var/www/web
@@ -51,8 +49,6 @@ services:
     ports:
       - "5080:80"
       - "5543:443"
-#    env_file:
-#     - ./webenv.env
     volumes :
       - ./web:/var/www/web
       - ./src:/var/www/src
@@ -64,11 +60,11 @@ services:
       - mailcatcher:mail
       - postgres:pg
 ```
-####exemple : service php-cli avec lancement du serveur embarqué : 
+#### exemple : service php-cli avec lancement du serveur embarqué : 
 ```
 services:
   php:
-    image: canals/php:7.2-cli
+    image: canals/php:7.3-cli
     ports:
       - "8800:8000"
     volumes:
@@ -93,7 +89,7 @@ services:
 Ne pas oublier de lier le service mysql dans tous les services qui doivent accéder à la base
 mysql, par exemple dans les services php.
 
-####exemple
+#### exemple
 
 ```
   mysql:
@@ -146,7 +142,7 @@ mysql, par exemple dans les services php.
  * l'image expose les ports `1025` et `1080`
  * ajouter le lien dans les services qui doivent accéder au serveur
 
-####exemple
+#### exemple
 ```
 mailcatcher:
   image: schickling/mailcatcher
@@ -155,7 +151,7 @@ mailcatcher:
     - "1025:1025
 ```
 
-####usage
+#### usage
  Dans un service php déclarant le lien mailcatcher :
 ```
  web:

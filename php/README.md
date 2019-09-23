@@ -1,8 +1,8 @@
 # canals/php
 
-##Images docker PHP  construite pour un usage pédagogique et pour fabriquer un environnement de développement web/php
+## Images docker PHP  construite pour un usage pédagogique et pour fabriquer un environnement de développement web/php
 
-###description
+### Description
 Images docker pour la création d'un container destiné à du dev. web en php. Les images sont basées sur
 les images php [officielle](https://hub.docker.com/_/php/), avec les tag `7.2-apache`, `7.2-cli`, `7.1-apache` , 
 `7.1-cli`ou `5.6-apache`.
@@ -10,9 +10,11 @@ Les images contiennent un grand nombre d'extensions classiques et n'ont pas voca
 Le dockerfile s'inspire de [celui-ci](https://hub.docker.com/r/lavoweb/php-5.6/), et de
 [vaprobash](https://github.com/fideloper/Vaprobash)
 
-###tag
+### tag
++ `7.3-cli` : image pour php 7.3 cli, sans apache, basée sur l'image officielle `php:7.3-cli`
++ `7.3`, `latest` : image pour php 7.3 + apache, basée sur l'image officielle `php:7.3-apache`
 + `7.2-cli` : image pour php 7.2 cli, sans apache, basée sur l'image officielle `php:7.2-cli`
-+ `7.2`, `latest` : image pour php 7.2 + apache, basée sur l'image officielle `php:7.2-apache`
++ `7.2` : image pour php 7.2 + apache, basée sur l'image officielle `php:7.2-apache`
 + `7.1-cli` : image pour php 7.1 cli, sans apache, basée sur l'image officielle `php:7.1-cli`
 + `7.1`, : image pour php 7.1 + apache, basée sur l'image officielle `php:7.1-apache`
 + `5.6` : image pour php 5.6 + apache, basée sur l'image officielle `php:5.6-apache`
@@ -21,9 +23,9 @@ Le dockerfile s'inspire de [celui-ci](https://hub.docker.com/r/lavoweb/php-5.6/)
 Le répertoire [test](test) contient des fichiers docker-compose pour vérifier le fonctionnement de chacune des images
 
 
-###contenu des images
+### contenu des images
 
-####apache (`7.2` , `latest`, `7.1` , `5.6` ):
+#### apache (`7.3`, `latest`, `7.2` , `7.1` , `5.6` ):
 
 + apache 2.4, modules `mod_rewrite` et `mod_ssl` activés,
 + un vhost par défaut sure le port 80, docroot `/var/www/html`
@@ -32,9 +34,9 @@ Le répertoire [test](test) contient des fichiers docker-compose pour vérifier 
     * VHOST_HOSTNAME : contient le hostname du vhost
     * VHOST_DOCROOT : le docroot du vhost
 
-####php :
+#### php :
 
-+ php7.2, php7.1 ou 5.6 cli et sous forme de module apache dans les images apache (`mod_php7`, `mod_php5`)
++ php7.3, php7.2, php7.1 ou 5.6 cli et sous forme de module apache dans les images apache (`mod_php7`, `mod_php5`)
 + extensions : `mbstring`, `curl`, `ftp`, `openssl`, `zlib`, `bcmath`, `bz2`, `calendar`, `dba`, `exif`
    `gd`, `gettext`, `imap`, `intl`, `mcrypt` (sauf 7.2), `soap`, `tidy`, `xmlrpc`, `xsl`, `zip`, `imagick`
 + PDO : `pdo`, `pdo_mysql`, `pdo_sqlite`, `pdo_pgsql`
@@ -124,27 +126,27 @@ default_socket_timeout = 60
 ```
 
 
-###Utilisation des images
+### Utilisation des images
 
 #### image php-cli
 L'image ne démarre aucune commande, et n'expose aucun port. Il est nécessaire de monter 
 les volumes et de prévoir  la commande lors de la création d'un conteneur.
 
-#####exemple : exécution d'un script php dans le répertoire courant : 
+##### exemple : exécution d'un script php dans le répertoire courant : 
 ```bash
 $ docker run -it --rm  \
       -v "$PWD":/var/php \
       -w /var/php \
-       canals/php:7.2-cli \
+       canals/php:7.3-cli \
        php prog.php
 ```
-#####exemple : lancement d'un serveur php sur le port 8000 dans le répertoire courant : 
+##### exemple : lancement d'un serveur php sur le port 8000 dans le répertoire courant : 
 ```bash
 $ docker run --rm -it \
              -p 8000:8000 \
              -v "$PWD":/var/php \
              -w /var/php \
-             canals/php:7.2-cli \
+             canals/php:7.3-cli \
              php -S 0.0.0.0:8000 
 ```
 
@@ -176,7 +178,7 @@ installer des extensions, pour copier un fichier de configuration ou pour décla
 
 ####exemple
 ```
-FROM canals/php:7.2
+FROM canals/php:7.3
 
 RUN pecl install mailparse \
    && docker-php-ext-enable mailparse
