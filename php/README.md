@@ -154,7 +154,7 @@ $ docker run --rm -it \
 Il est conseillé de monter les volumes correspondant aux _docroot_ des vhosts créés : vhost par défaut s'il est utilisé,
 vhost spécifique.
 
-#####exemple :
+##### exemple :
 
 ```bash
 $ docker run -d --name vhost-php \
@@ -167,7 +167,7 @@ $ docker run -d --name vhost-php \
        canals/php:latest
 ```
 
-###Adaptation de l'image
+### Adaptation de l'image
 
 Pour adapter l'image à des besoins particuliers, le plus simple est de créer un Dockerfile et de l'utiliser pour
 installer des extensions, pour copier un fichier de configuration ou pour déclarer un volume spécifique.
@@ -176,7 +176,7 @@ installer des extensions, pour copier un fichier de configuration ou pour décla
    [ici](https://hub.docker.com/_/php/)
 + modifier la configuration php : copier un fichier `.ini` dans le répertoire `/usr/local/etc/php/`
 
-####exemple
+#### exemple
 ```
 FROM canals/php:7.3
 
