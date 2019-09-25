@@ -39,7 +39,7 @@ services:
     working_dir: /var/php
     networks:
       - local_network
-    command: php -S localhost:8000 index.php
+    command: php -S 0.0.0.0:8000 index.php
     links :
       - mysql:db
 #      - mongo:mongo
