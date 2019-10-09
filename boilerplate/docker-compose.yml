@@ -28,8 +28,7 @@ services:
 #      - postgres:pg
 
   php:
-    image: canals/php7.2-cli
-    container_name: php.local
+    image: canals/php7.3-cli
     expose:
       - "8000"
     ports:
@@ -53,10 +52,11 @@ services:
 #    image: mysql:5.6
     image: mariadb:latest
     container_name: mysql.dev.local
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8_general_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_USER=user
-      - MYSQL_PASSWORD=user
+      - MYSQL_PASSWORD=secure
       - MYSQL_DATABASE=mydatab
     networks:
       - local_network
@@ -67,7 +67,6 @@ services:
 
   adminer:
      image: adminer
-     container_name: adminer.dev.local
      ports:
        - "8080:8080"
      networks:
@@ -77,34 +76,13 @@ services:
 
 
 
-##############################################
-# A second php service
-##############################################
 
-#  api:
-#      image: canals/php
-#      container_name: api
-##      environment:
-#       - VHOST_HOSTNAME=api.local
-#       - VHOST_DOCROOT=/var/www/api
-#     ports:
-#       - "6080:80"
-#       - "6443:443"
-#     volumes :
-#       - ./api:/var/www/api
-#       - ./src:/var/www/src
-#       - ./html:/var/www/html
-#     networks:
-#       - local_network
-#     links :
-#        - mysql:db
 
 ##################################
 # postgres + adminer
 ###################################
 # postgres:
 #   image: postgres
-#   container_name: postgres.local
 #   environment :
 #     - POSTGRES_PASSWORD = pgroot
 #     - POSTGRES_USER = pguser
@@ -115,7 +93,6 @@ services:
 
 # adminer-pg:
 #   image: adminer
-#   container_name: adminer_pg.dev.local
 #   networks:
 #     - local_network
 #   ports:
