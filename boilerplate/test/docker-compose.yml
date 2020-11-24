@@ -6,7 +6,7 @@ networks:
 
 services:
   web:
-    image: canals/php:latest
+    image: canals/php:7.4
     environment:
       - VHOST_HOSTNAME=web.test.local
       - VHOST_DOCROOT=/var/www/web
@@ -28,7 +28,7 @@ services:
       - local_network
 
   php:
-    image: canals/php:7.2-cli
+    image: canals/php:7.4-cli
     expose:
       - "8000"
     ports:
@@ -77,8 +77,8 @@ services:
   postgres:
     image: postgres
     environment :
-      - POSTGRES_PASSWORD = pgroot
-      - POSTGRES_USER = pguser
+      - POSTGRES_PASSWORD=pgroot
+      - POSTGRES_USER=pguser
     ports:
       - "5432:5432"
     networks:

@@ -29,7 +29,7 @@ $ docker-compose -f docker-compose.yml start
 ### machine(s) php
 
 * un ou plusieurs services php/apache ou php-cli
-* basés sur les images `canals/php`, les tags `:latest`, `:7.3`, `:7.2` et `7.2-cli`, `:7.1` 
+* basés sur les images `canals/php`, les tags `:latest`, `:7.4`,`:7.4-cli`, `:7.3`,`:7.3-cli`, `:7.2` et `7.2-cli`, `:7.1` 
 et `7.1-cli`,`:5.6` sont utilisables (pour plus de détails sur ces images, 
 voir la [doc](https://hub.docker.com/r/canals/php/) )
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
@@ -64,7 +64,7 @@ services:
 ```
 services:
   php:
-    image: canals/php:7.3-cli
+    image: canals/php:7.4-cli
     ports:
       - "8800:8000"
     volumes:
