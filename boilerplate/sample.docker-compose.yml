@@ -1,0 +1,141 @@
+version: "3"
+
+networks:
+  local_network:
+    driver: bridge
+
+services:
+  web:
+    image: canals/php:latest
+    environment:
+      - VHOST_HOSTNAME=web.dev.local
+      - VHOST_DOCROOT=/var/www/web
+    ports:
+      - "5080:80"
+      - "5543:443"
+    volumes :
+      - ./web:/var/www/web
+      - ./src:/var/www/src
+      - ./html:/var/www/html
+      - data:/var/www/data
+    working_dir : /var/www/src
+    networks:
+      - local_network
+    links :
+      - mysql:db
+#      - mongo:mongo
+#      - mail:mail
+#      - postgres:pg
+
+  php:
+    image: canals/php:8.0-cli
+    expose:
+      - "8000"
+    ports:
+      - "8800:8000"
+    volumes:
+     - ./:/var/php
+    working_dir: /var/php
+    networks:
+      - local_network
+    command: php -S 0.0.0.0:8000 index.php
+    links :
+      - mysql:db
+#      - mongo:mongo
+#      - mail:mail
+#      - postgres:pg
+
+#############################
+# mysql/mariadb + adminer / can be replaced by mariadb
+#############################
+  mysql:
+#    image: mysql:5.6
+    image: mariadb:latest
+    container_name: mysql.dev.local
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8_general_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=secure
+      - MYSQL_DATABASE=mydatab
+    networks:
+      - local_network
+    ports:
+      - "3603:3306"
+    volumes :
+      - ./sql:/var/sql
+
+  adminer:
+     image: adminer
+     ports:
+       - "8080:8080"
+     networks:
+       - local_network
+     links:
+       - mysql:db
+
+
+
+
+
+##################################
+# postgres + adminer
+###################################
+# postgres:
+#   image: postgres
+#   environment :
+#     - POSTGRES_PASSWORD = pgroot
+#     - POSTGRES_USER = pguser
+#   networks:
+#     - local_network
+#   ports:
+#     - "5432:5432"
+
+# adminer-pg:
+#   image: adminer
+#   networks:
+#     - local_network
+#   ports:
+#     - "8088:8080"
+#   links:
+#     - postgres:db
+#
+
+################################################
+# mongodb & mongo-express
+###############################################
+## mongo:
+#   image: mongo:3.4
+#   container_name: mongo.dev.local
+#   networks:
+#      - local_network
+#   ports:
+#      - 27017:27017
+
+# mongo-express:
+#      image: mongo-express:latest
+#      container_name: mongo_express.dev.local
+#    networks:
+#        - local_network
+#      ports:
+#        - "8081:8081"
+#      links:
+#        - mongo:mongo
+
+##############################################
+# mailcatcher
+##############################################
+## mail:
+#    image: schickling/mailcatcher
+#    container_name: mail.dev.local
+#    networks:
+#       - local_network
+#    ports:
+#      - "1080:1080"
+
+########################################
+# shared storage : useful for, e.g. sharing
+#   uploaded documents (img, others) between multiple services
+########################################
+volumes:
+   data:

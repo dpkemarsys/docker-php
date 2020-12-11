@@ -1,5 +1,5 @@
 # Use an official Python runtime as a base image
-FROM php:7.4-cli
+FROM php:8.0-cli
 
 RUN apt-get update && \
     apt-get install --yes --force-yes \
@@ -13,7 +13,7 @@ RUN apt-get update && \
 
 
 # PHP Configuration
-RUN docker-php-ext-install bcmath bz2 calendar dba exif gettext intl soap tidy xmlrpc xsl zip&&\
+RUN docker-php-ext-install bcmath bz2 calendar dba exif gettext intl soap tidy xsl zip&&\
     docker-php-ext-install mysqli pgsql pdo pdo_mysql pdo_pgsql  &&\
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp &&\
     docker-php-ext-install gd &&\

@@ -1,5 +1,5 @@
 # Use an official Python runtime as a base image
-FROM php:7.4-cli
+FROM php:8.0-apache
 
 RUN apt-get update && \
     apt-get install --yes --force-yes \
@@ -13,7 +13,7 @@ RUN apt-get update && \
 
 
 # PHP Configuration
-RUN docker-php-ext-install bcmath bz2 calendar dba exif gettext intl soap tidy xmlrpc xsl zip&&\
+RUN docker-php-ext-install bcmath bz2 calendar dba exif gettext intl soap tidy xsl zip&&\
     docker-php-ext-install mysqli pgsql pdo pdo_mysql pdo_pgsql  &&\
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp &&\
     docker-php-ext-install gd &&\
@@ -27,20 +27,23 @@ RUN docker-php-ext-install bcmath bz2 calendar dba exif gettext intl soap tidy x
             && mv composer.phar /usr/bin/composer
 
 # Apache Configuration
-#RUN a2enmod rewrite
+RUN a2enmod rewrite 
 
 # SSL
-#RUN mv  /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/000-default-ssl.conf &&\
-#    a2enmod ssl && \
-#    a2ensite 000-default-ssl &&\
-#    openssl req -subj '/CN=example.com/O=My Company Name LTD./C=US' -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem
-#
-#EXPOSE 443
+RUN mv  /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/000-default-ssl.conf &&\
+    a2enmod ssl && \
+    a2ensite 000-default-ssl &&\
+    openssl req -subj '/CN=example.com/O=My Company Name LTD./C=US' -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem
 
-# Imagemagick
-#RUN apt-get install --yes --force-yes libmagickwand-dev libmagickcore-dev
+EXPOSE 443
+
+# Imagemagick : install fails on 8.0
+RUN apt-get install --yes --force-yes libmagickwand-dev libmagickcore-dev
 #RUN yes '' | pecl install -f imagick &&\
 #    docker-php-ext-enable imagick
 
-#COPY create_vhost start /usr/local/bin/
+COPY create_vhost config-vhost start /usr/local/bin/
 COPY php.ini /usr/local/etc/php/
+
+
+CMD ["start"]

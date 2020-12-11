@@ -1,0 +1,131 @@
+version: "3"
+
+networks:
+  local_network:
+    driver: bridge
+
+services:
+  web:
+    image: canals/php:8.0
+    environment:
+      - VHOST_HOSTNAME=web.test.local
+      - VHOST_DOCROOT=/var/www/web
+    ports:
+      - "5180:80"
+      - "5443:443"
+    volumes :
+      - ./web:/var/www/web
+      - ./src:/var/www/src
+      - ./html:/var/www/html
+      - data:/var/www/data
+    working_dir: /var/www/src
+    links :
+      - mysql:db
+#      - postgres:pg
+#      - mongo:mongo
+#      - mail:mail
+    networks:
+      - local_network
+
+  php:
+    image: canals/php:8.0-cli
+    expose:
+      - "8000"
+    ports:
+      - "8800:8000"
+    volumes:
+     - ./:/var/php
+    working_dir: /var/php
+    networks:
+      - local_network
+    command: php -S 0.0.0.0:8000 web/index-cli.php
+    links :
+      - mysql:db
+      - mongo:mongo
+#      - mail:mail
+#      - postgres:pg
+
+
+#############################
+# mysql + adminer / can be replaced by mariadb
+#############################
+  mysql:
+    #image: mysql:5.6
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+    ports:
+      - "3603:3306"
+    networks:
+      - local_network
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    links:
+      - mysql:db
+    networks:
+      - local_network
+
+##################################
+# postgres + adminer
+###################################
+# postgres:
+#   image: postgres
+#   environment :
+#   - POSTGRES_PASSWORD=pgroot
+#   - POSTGRES_USER=pguser
+#   ports:
+#   - "5432:5432"
+#   networks:
+#   - local_network
+
+# adminer-pg:
+#   image: adminer
+#   ports:
+#   - "8088:8080"
+#   links:
+#   - postgres:db
+#   networks:
+#   - local_network
+
+
+################################################
+# mongodb & mongo-express
+###############################################
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    networks:
+      - local_network
+
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    links:
+      - mongo:mongo
+    networks:
+      - local_network
+
+##############################################
+# mailcatcher : so useful !
+##############################################
+# mail:
+#   image: schickling/mailcatcher
+#   container_name: mail_test
+#   ports:
+#     - "1080:1080"
+#   networks:
+#     - local_network
+
+########################################
+# shared storage : useful for, e.g. sharing
+#   uploaded documents (img, others) between multiple services
+########################################
+volumes:
+   data:
