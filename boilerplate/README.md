@@ -29,7 +29,7 @@ $ docker-compose -f docker-compose.yml start
 ### machine(s) php
 
 * un ou plusieurs services php/apache ou php-cli
-* basés sur les images `canals/php`, les tags `:latest`, `:7.4`,`:7.4-cli`, `:7.3`,`:7.3-cli`, `:7.2` et `7.2-cli`, `:7.1` 
+* basés sur les images `canals/php`, les tags `:8.0`,`:8.0-cli`, `:7.4`,`:latest`,`:7.4-cli`, `:7.3`,`:7.3-cli`, `:7.2` et `7.2-cli`, `:7.1` 
 et `7.1-cli`,`:5.6` sont utilisables (pour plus de détails sur ces images, 
 voir la [doc](https://hub.docker.com/r/canals/php/) )
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
@@ -44,8 +44,8 @@ services:
     environment:
       - VHOST_HOSTNAME=web.dev.local
       - VHOST_DOCROOT=/var/www/web
-      - http_proxy=http://www-cache:1234
-      - https_proxy=http://www-cache:1234
+#     - http_proxy=http://www-cache:1234     
+#     - https_proxy=http://www-cache:1234
     ports:
       - "5080:80"
       - "5543:443"
@@ -120,7 +120,7 @@ mysql, par exemple dans les services php.
 
 ```
   mongodb:
-    image: mongo:3.4
+    image: mongo:latest
     ports:
         - 27017:27017
 
