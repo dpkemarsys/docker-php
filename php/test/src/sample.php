@@ -8,3 +8,5 @@
  */
 
 $sample ='hungry heart';
+
+return $sample;

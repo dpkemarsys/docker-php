@@ -8,4 +8,4 @@
 
 echo "php is running !". '<br>';
 
-echo "uri : ". $_SERVER['PATH_INFO'] ;
+echo "uri : ". ( isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : "/") ;
