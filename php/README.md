@@ -4,17 +4,19 @@
 
 ### Description
 Images docker pour la création d'un container destiné à du dev. web en php. Les images sont basées sur
-les images php [officielle](https://hub.docker.com/_/php/), avec les tag `7.2-apache`, `7.2-cli`, `7.1-apache` , 
+les images php [officielle](https://hub.docker.com/_/php/), avec les tag `8.1-apache`, `8.1-cli`,`7.4-apache`, `7.4-cli`,`7.3-apache`, `7.3-cli`, `7.1-apache` , 
 `7.1-cli`ou `5.6-apache`.
 Les images contiennent un grand nombre d'extensions classiques et n'ont pas vocation à être utilisées en production.
 Le dockerfile s'inspire de [celui-ci](https://hub.docker.com/r/lavoweb/php-5.6/), et de
 [vaprobash](https://github.com/fideloper/Vaprobash)
 
 ### tag
++ `8.1-apache`, `latest`  : image pour php 8.1 + apache, basée sur l'image officielle `php:8.1-apache`
++ `8.1-cli` : image pour php 8.1 cli, sans apache, basée sur l'image officielle `php:8.1-cli` 
 + `8.0-cli` : image pour php 8.0 cli, sans apache, basée sur l'image officielle `php:8.0-cli`
 + `8.0` : image pour php 8.0 + apache, basée sur l'image officielle `php:8.0-apache`
 + `7.4-cli` : image pour php 7.4 cli, sans apache, basée sur l'image officielle `php:7.4-cli`
-+ `7.4`, `latest` : image pour php 7.4 + apache, basée sur l'image officielle `php:7.4-apache`
++ `7.4`: image pour php 7.4 + apache, basée sur l'image officielle `php:7.4-apache`
 + `7.3-cli` : image pour php 7.3 cli, sans apache, basée sur l'image officielle `php:7.3-cli`
 + `7.3` : image pour php 7.3 + apache, basée sur l'image officielle `php:7.3-apache`
 + `7.2-cli` : image pour php 7.2 cli, sans apache, basée sur l'image officielle `php:7.2-cli`
@@ -29,7 +31,7 @@ Le répertoire [test](test) contient des fichiers docker-compose pour vérifier 
 
 ### contenu des images
 
-#### apache (`8.0`, `7.4`, `latest`, `7.3`,  `7.2` , `7.1` , `5.6` ):
+#### apache (`8.1`,`8.0`, `7.4`, `latest`, `7.3`,  `7.2` , `7.1` , `5.6` ):
 
 + apache 2.4, modules `mod_rewrite` et `mod_ssl` activés,
 + un vhost par défaut sure le port 80, docroot `/var/www/html`
@@ -40,9 +42,9 @@ Le répertoire [test](test) contient des fichiers docker-compose pour vérifier 
 
 #### php :
 
-+ php8.0, php7.4, php7.3, php7.2, php7.1 ou 5.6 cli et sous forme de module apache dans les images apache (`mod_php7`, `mod_php5`)
++ php8.1, php8.0, php7.4, php7.3, php7.2, php7.1 ou 5.6 cli et sous forme de module apache dans les images apache (`mod_php7`, `mod_php5`)
 + extensions : `mbstring`, `curl`, `ftp`, `openssl`, `zlib`, `bcmath`, `bz2`, `calendar`, `dba`, `exif`
-   `gd`, `gettext`, `imap`, `intl`, `mcrypt` (uniquement 5.6, 7.1), `soap`, `tidy`, `xmlrpc` (non installé sur 8.0), `xsl`, `zip`, `imagick` (non installé sur 8.0)
+   `gd`, `gettext`, `imap`, `intl`, `mcrypt` (uniquement 5.6, 7.1), `soap`, `tidy`, `xmlrpc` (non installé sur 8.x), `xsl`, `zip`, `imagick` (non installé sur 8.0)
 + PDO : `pdo`, `pdo_mysql`, `pdo_sqlite`, `pdo_pgsql`
 + autres extensions : `xdebug`, `mongodb`, `redis`
 + composer
@@ -141,7 +143,7 @@ les volumes et de prévoir  la commande lors de la création d'un conteneur.
 $ docker run -it --rm  \
       -v "$PWD":/var/php \
       -w /var/php \
-       canals/php:7.4-cli \
+       canals/php:8.1-cli \
        php prog.php
 ```
 ##### exemple : lancement d'un serveur php sur le port 8000 dans le répertoire courant : 
@@ -150,7 +152,7 @@ $ docker run --rm -it \
              -p 8000:8000 \
              -v "$PWD":/var/php \
              -w /var/php \
-             canals/php:7.4-cli \
+             canals/php:8.1-cli \
              php -S 0.0.0.0:8000 
 ```
 
@@ -182,7 +184,7 @@ installer des extensions, pour copier un fichier de configuration ou pour décla
 
 #### exemple
 ```
-FROM canals/php:7.4
+FROM canals/php:latest
 
 RUN pecl install mailparse \
    && docker-php-ext-enable mailparse
