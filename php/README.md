@@ -11,7 +11,7 @@ Le dockerfile s'inspire de [celui-ci](https://hub.docker.com/r/lavoweb/php-5.6/)
 [vaprobash](https://github.com/fideloper/Vaprobash)
 
 ### tag
-+ `8.1-apache`, `latest`  : image pour php 8.1 + apache, basée sur l'image officielle `php:8.1-apache`
++ `8.1-apache`, `8.1`, `latest`  : image pour php 8.1 + apache, basée sur l'image officielle `php:8.1-apache`
 + `8.1-cli` : image pour php 8.1 cli, sans apache, basée sur l'image officielle `php:8.1-cli` 
 + `8.0-cli` : image pour php 8.0 cli, sans apache, basée sur l'image officielle `php:8.0-cli`
 + `8.0` : image pour php 8.0 + apache, basée sur l'image officielle `php:8.0-apache`
