@@ -6,7 +6,7 @@ networks:
 
 services:
   web:
-    image: canals/php:8.0
+    image: canals/php:latest
     environment:
       - VHOST_HOSTNAME=web.test.local
       - VHOST_DOCROOT=/var/www/web
@@ -19,16 +19,19 @@ services:
       - ./html:/var/www/html
       - data:/var/www/data
     working_dir: /var/www/src
-    links :
-      - mysql:db
+#    links :
+#      - mysql:db
 #      - postgres:pg
 #      - mongo:mongo
 #      - mail:mail
     networks:
       - local_network
+    depends_on:
+      - mysql
+      - mongo
 
   php:
-    image: canals/php:8.0-cli
+    image: canals/php:8.1-cli
     expose:
       - "8000"
     ports:
@@ -39,9 +42,12 @@ services:
     networks:
       - local_network
     command: php -S 0.0.0.0:8000 web/index-cli.php
-    links :
-      - mysql:db
-      - mongo:mongo
+    depends_on:
+      - mysql
+      - mongo
+#    links :
+#     - mysql:db
+#     - mongo:mongo
 #      - mail:mail
 #      - postgres:pg
 
@@ -50,7 +56,6 @@ services:
 # mysql + adminer / can be replaced by mariadb
 #############################
   mysql:
-    #image: mysql:5.6
     image: mariadb:latest
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -59,14 +64,14 @@ services:
     ports:
       - "3603:3306"
     networks:
-      - local_network
+      local_network:
+        aliases:
+          - db
 
   adminer:
     image: adminer
     ports:
       - "8080:8080"
-    links:
-      - mysql:db
     networks:
       - local_network
 
@@ -96,32 +101,33 @@ services:
 ################################################
 # mongodb & mongo-express
 ###############################################
-  mongo:
+  mongodb:
     image: mongo:latest
     ports:
       - 27017:27017
     networks:
-      - local_network
+      local_network:
+        aliases:
+          - mongo
 
   mongo-express:
     image: mongo-express:latest
     ports:
       - "8081:8081"
-    links:
-      - mongo:mongo
+#    links:
+#      - mongo:mongo
     networks:
       - local_network
 
 ##############################################
 # mailcatcher : so useful !
 ##############################################
-# mail:
-#   image: schickling/mailcatcher
-#   container_name: mail_test
-#   ports:
-#     - "1080:1080"
-#   networks:
-#     - local_network
+  mail:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+    networks:
+      - local_network
 
 ########################################
 # shared storage : useful for, e.g. sharing

@@ -7,7 +7,7 @@
  * @author: canals
  */
 
-require_once __DIR__ . '/../src/sample.php';
+$sample = require_once __DIR__ . '/../src/sample.php';
 
 echo <<<EOT
 <!-- DOCTYPE html-->

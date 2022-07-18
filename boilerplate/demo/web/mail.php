@@ -9,7 +9,7 @@
 
 require __DIR__ . '/../src/vendor/autoload.php';
 
-$mailer = new Swift_Mailer( new Swift_SmtpTransport('mail', 1025) );
+$mailer = new Swift_Mailer( new Swift_SmtpTransport('mail', 1025, '') );
 
 $message = (new Swift_Message('test subject'))
      ->setFrom( ['john.doe@mix.com'=>'john doe'])

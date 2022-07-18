@@ -29,7 +29,7 @@ $ docker-compose -f docker-compose.yml start
 ### machine(s) php
 
 * un ou plusieurs services php/apache ou php-cli
-* basés sur les images `canals/php`, les tags `:8.0`,`:8.0-cli`, `:7.4`,`:latest`,`:7.4-cli`, `:7.3`,`:7.3-cli`, `:7.2` et `7.2-cli`, `:7.1` 
+* basés sur les images `canals/php`, les tags `:8.1`,`:8.1-cli`, `:latest`, `:8.0`,`:8.0-cli`, `:7.4`,`:7.4-cli`, `:7.3`,`:7.3-cli`, `:7.2` et `7.2-cli`, `:7.1` 
 et `7.1-cli`,`:5.6` sont utilisables (pour plus de détails sur ces images, 
 voir la [doc](https://hub.docker.com/r/canals/php/) )
 * conseils : utiliser les vhost et les déclarer dans votre `/etc/hosts`
@@ -54,26 +54,28 @@ services:
       - ./src:/var/www/src
       - ./html:/var/www/html
       - data:/var/www/data
-    links :
-      - mysql:db
-      - mongodb:mongo
-      - mailcatcher:mail
-      - postgres:pg
+    networks:          
+      - local_network  
+    depends_on :
+      - mysql
+      - mongodb
 ```
 #### exemple : service php-cli avec lancement du serveur embarqué : 
 ```
 services:
   php:
-    image: canals/php:7.4-cli
+    image: canals/php:8.1-cli
     ports:
       - "8800:8000"
     volumes:
      - ./:/var/php
     working_dir: /var/php
     command: php -S 0.0.0.0:8000 index.php
-    links :
-      - mysql:db
-      - mongo:mongo
+    networks:          
+      - local_network  
+    depends_on :
+      - mysql
+      - mongodb
 ```
 
 ### mysql + adminer
@@ -86,28 +88,34 @@ services:
   si les fichiers d'import/export sont trop volumineux pour être traités par adminer
 
 #### important :
-Ne pas oublier de lier le service mysql dans tous les services qui doivent accéder à la base
-mysql, par exemple dans les services php.
+Le service mysql est accessible dans tous les services connectés au même réseau avec 
+un hostname ayant pour valeur le nom du service.
+On peut ajouter un ou plusieurs hostname alternatifs avec la directive sous directive `aliases` de la directive `networks`
+
 
 #### exemple
 
 ```
   mysql:
     image: mariadb:latest
-#    image: mysql:5.6
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=user
       - MYSQL_PASSWORD=user
     ports:
       - "3603:3306"
+    networks:
+      aliases:
+        - db
       
   adminer:
      image: adminer
      ports:
        - "8080:8080"
-     links:
-       - mysql:db
+     depends_on:
+       - mysql
+  # Dans ce conteneur, le serveur mysql est accessible avec le hostname mysql et 
+  # le hostname db
 ```
 
 ### mongodb + mongo-express
@@ -123,13 +131,17 @@ mysql, par exemple dans les services php.
     image: mongo:latest
     ports:
         - 27017:27017
+    networks:
+      local_network:
+        aliases:
+          - mongo
 
   mongo-express:
      image: mongo-express:latest
      ports:
         - "8081:8081"
-     links:
-        - mongodb:mongo
+     depends_on:
+       - mongodb
 ```
 
 ### mailcatcher
@@ -149,6 +161,10 @@ mailcatcher:
   ports:
     - "1080:1080"
     - "1025:1025
+  networks: 
+    local_network:
+      aliases:
+        - mail.server
 ```
 
 #### usage
@@ -157,15 +173,16 @@ mailcatcher:
  web:
      image: canals/php
      ...
-     links :
-       - mysql:db
-       - mailcatcher:mail
+     networks:
+        - localnetwork
+     depends_on:
+       - mailcatcher
 ```
 
- il faut utiliser le serveur de mail nommé `mail` sur le port `1025`.
+ il faut utiliser le serveur de mail nommé `mail.server` sur le port `1025`.
 
  Par exemple, avec SwiftMailer :
 ```
- $mailer = new Swift_Mailer( new Swift_SmtpTransport('mail', 1025) );
+ $mailer = new Swift_Mailer( new Swift_SmtpTransport('mail.server', 1025) );
 ```
 
